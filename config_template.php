@@ -8,5 +8,5 @@ $DBPASS = "";
 $DBPORT = 0;
 $DBSERVER = "";
 
-ini_set('memory_limit', '1024M');
+session_start();
 ?>
