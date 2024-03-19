@@ -58,5 +58,15 @@
 .error-msg{
     color: red;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: -15px;
+}
+
+.titulo-paginacao{
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.numero-paginacao{
+    font-weight: bold;
+    margin-top: 6px;
 }

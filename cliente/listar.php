@@ -6,7 +6,20 @@
     include "../header.php";
     include "../funcoes.php";
 
-    $sql_listagem = $conn->query('SELECT * FROM clientes');
+    $filtro = (isset($_GET['filtro'])) ? preg_replace("/[^a-zA-Z0-9]/", "", $_GET['filtro']) : '';
+    $pagina = (isset($_GET['pagina'])) ? $_GET['pagina'] : 1;
+
+    $sql_total = $conn->query('SELECT COUNT(id) as TOTAL FROM clientes');
+    $result = $sql_total->fetchAll();
+    $ultima_page = ceil($result[0]['TOTAL']/10);
+
+    $sql_listagem = $conn->query('SELECT * FROM clientes 
+                                    WHERE nome LIKE "%'.$filtro.'%" 
+                                    OR data_nascimento LIKE "%'.$filtro.'%" 
+                                    OR cpf LIKE "%'.$filtro.'%" 
+                                    OR rg LIKE "%'.$filtro.'%" 
+                                    OR telefone LIKE "%'.$filtro.'%" 
+                                ORDER BY nome LIMIT 10 OFFSET '.(intval($pagina)-1)*10);
     $rows = $sql_listagem->fetchAll();
 ?>
 
@@ -16,6 +29,13 @@
     </a>
     <br><br>
     <div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="filtro_nome" value="<?php echo $filtro; ?>">
+            <label class="mdl-textfield__label" for="nome">Filtro</label>
+        </div>
+        <button type="button" onclick="filtrar()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored table-btn" data-upgraded=",MaterialButton">
+            <i class="material-icons">search</i>
+        </button>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp w-100">
             <thead>
                 <tr>
@@ -33,7 +53,7 @@
                     {
                 ?>
                     <tr>
-                        <td class="mdl-data-table__cell--non-numeric" colspan="6">Nenhum Cliente Registrado!</td>
+                        <td class="mdl-data-table__cell--non-numeric" colspan="6">Nenhum Cliente Encontrado!</td>
                     </tr>
                 <?php 
                     }
@@ -68,12 +88,40 @@
                 ?>
             </tbody>
         </table>
+        <div style="display: flex">
+            <p class="titulo-paginacao">Página (10 registros por página)</p>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" <?php if($pagina == 1) echo 'disabled';?> onclick="trocarPagina(1)">
+                <i class="material-icons">first_page</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" <?php if($pagina == 1) echo 'disabled';?> onclick="trocarPagina(<?php echo $pagina; ?> - 1)">
+                <i class="material-icons">chevron_left</i>
+            </button>
+            <p class="numero-paginacao"><?php echo $pagina; ?></p>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" <?php if($pagina == $ultima_page) echo 'disabled';?> onclick="trocarPagina(<?php echo $pagina; ?> + 1)">
+                <i class="material-icons">chevron_right</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" <?php if($pagina == $ultima_page) echo 'disabled';?> onclick="trocarPagina(<?php echo $ultima_page; ?>)">
+                <i class="material-icons">last_page</i>
+            </button>
+        </div>
     </div>
     <br>
     <a href="<?php echo $SITE; ?>home.php" class="mdl-button mdl-js-button mdl-button--raised  mdl-button--colored">
         Voltar
     </a>
 </main>
+
+<script>
+    function filtrar()
+    {
+        window.location="<?php echo $SITE.'cliente/listar.php?filtro='?>"+$("#filtro_nome").val()+"<?php echo '&pagina='.$pagina ?>";
+    }
+
+    function trocarPagina(value)
+    {
+        window.location="<?php echo $SITE.'cliente/listar.php?filtro='.$filtro.'&pagina=' ?>"+value;
+    }
+</script>
 
 <?php
     include "../footer.php";
