@@ -34,7 +34,7 @@ CREATE TABLE `cliente_endereco` (
   `estado` varchar(2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id_idx` (`cliente_id`),
-  CONSTRAINT `cliente_id` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
+  CONSTRAINT `cliente_id` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
