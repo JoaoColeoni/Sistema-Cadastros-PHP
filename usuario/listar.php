@@ -14,6 +14,9 @@
     $result = $sql_total->fetchAll();
     $ultima_page = ceil($result[0]['TOTAL']/10);
 
+    if($ultima_page == 0)
+        $ultima_page = 1;
+
     $sql_listagem = $conn->query('SELECT * FROM usuarios 
                                     WHERE login LIKE "%'.$filtro.'%" 
                                 ORDER BY login LIMIT 10 OFFSET '.(intval($pagina)-1)*10);

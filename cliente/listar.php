@@ -13,6 +13,9 @@
     $sql_total = $conn->query('SELECT COUNT(id) as TOTAL FROM clientes');
     $result = $sql_total->fetchAll();
     $ultima_page = ceil($result[0]['TOTAL']/10);
+    
+    if($ultima_page == 0)
+        $ultima_page = 1;
 
     $sql_listagem = $conn->query('SELECT * FROM clientes 
                                     WHERE nome LIKE "%'.$filtro.'%" 
