@@ -70,3 +70,7 @@
     font-weight: bold;
     margin-top: 6px;
 }
+
+.modal-exclusao{
+    width: calc(50vh);
+}

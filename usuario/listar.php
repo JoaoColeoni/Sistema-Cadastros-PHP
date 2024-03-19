@@ -5,6 +5,7 @@
     require "../conn.php";
     include "../header.php";
     include "../funcoes.php";
+    include "../modal_exclusao.php";
 
     $filtro = (isset($_GET['filtro'])) ? preg_replace("/[^a-zA-Z0-9]/", "", $_GET['filtro']) : '';
     $pagina = (isset($_GET['pagina'])) ? $_GET['pagina'] : 1;
@@ -58,9 +59,11 @@
                                 <a href="<?php echo $SITE; ?>usuario/formulario.php?id=<?php echo $row['id']; ?>" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent table-btn" data-upgraded=",MaterialButton">
                                     <i class="material-icons">edit</i>
                                 </a>
-                                <a href="<?php echo $SITE; ?>usuario/excluir.php?id=<?php echo $row['id']; ?>" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent table-btn" data-upgraded=",MaterialButton">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent table-btn" data-upgraded=",MaterialButton"
+                                        onclick="abrirModalExclusao('window.location=\'<?php echo $SITE; ?>usuario/excluir.php?id=<?php echo $row['id']; ?>\'','<?php echo $row['id']; ?>','<?php echo $row['login']; ?>')">
                                     <i class="material-icons">delete</i>
-                                </a>
+                                    
+                                </button>
                             </td>
                         </tr>
                     <?php 
